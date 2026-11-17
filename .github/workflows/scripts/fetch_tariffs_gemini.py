@@ -88,10 +88,27 @@ def main() -> int:
         temperature=0.0,
     )
 
-    models_to_try = ["gemini-2.0-flash", "gemini-1.5-flash"]
+    # Discover available models for this API key
+    available_models = []
+    try:
+        for m in client.models.list():
+            m_name = getattr(m, "name", "")
+            if "gemini" in m_name.lower():
+                clean_name = m_name.replace("models/", "")
+                available_models.append(clean_name)
+        print("Discovered models from Google API:", available_models[:10])
+    except Exception as e:
+        print("List models notice (skipped):", e)
+
+    preferred_models = ["gemini-2.5-flash", "gemini-2.5-pro"]
+    candidate_models = []
+    for m in preferred_models + available_models:
+        if m not in candidate_models:
+            candidate_models.append(m)
+
     response = None
     last_err = None
-    for model_name in models_to_try:
+    for model_name in candidate_models:
         try:
             print(f"Querying Gemini model: {model_name}...")
             response = client.models.generate_content(
