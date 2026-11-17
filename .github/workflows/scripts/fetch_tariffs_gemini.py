@@ -63,7 +63,11 @@ def main() -> int:
     current_data = fetch_current_gist(GIST_ID, GIST_TOKEN)
     print("Current Gist data:", current_data)
 
-    client = genai.Client(api_key=GEMINI_API_KEY)
+    # تفعيل v1beta لدعم أداة Google Search
+    client = genai.Client(
+        api_key=GEMINI_API_KEY,
+        http_options=types.HttpOptions(api_version="v1beta"),
+    )
     prompt = f"""
 ابحث عبر Google Search في المصادر المصرية الرسمية والمعتمدة (مثل egyptera.org، sis.gov.eg، petroleum.gov.eg، والمواقع الإخبارية الرسمية المصرية) عن أحدث أسعار رسمية سارية في مصر بتاريخ اليوم ({today_str}) لكل من:
 1. سعر لتر السولار (الديزل) الرسمي في مصر بالجنيه المصري.
@@ -88,29 +92,12 @@ def main() -> int:
         temperature=0.0,
     )
 
-    # Discover available models for this API key
-    available_models = []
-    try:
-        for m in client.models.list():
-            m_name = getattr(m, "name", "")
-            if "gemini" in m_name.lower():
-                clean_name = m_name.replace("models/", "")
-                available_models.append(clean_name)
-        print("Discovered models from Google API:", available_models[:10])
-    except Exception as e:
-        print("List models notice (skipped):", e)
-
-    preferred_models = ["gemini-2.5-flash", "gemini-2.5-pro"]
-    candidate_models = []
-    for m in preferred_models + available_models:
-        if m not in candidate_models:
-            candidate_models.append(m)
-
+    models_to_try = ["gemini-2.5-flash", "gemini-2.5-pro"]
     response = None
     last_err = None
-    for model_name in candidate_models:
+    for model_name in models_to_try:
         try:
-            print(f"Querying Gemini model: {model_name}...")
+            print(f"Querying Gemini model: {model_name} with v1beta Google Search...")
             response = client.models.generate_content(
                 model=model_name,
                 contents=prompt,
