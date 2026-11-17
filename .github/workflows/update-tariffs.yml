@@ -1,0 +1,29 @@
+name: Update Egypt Solar Tariffs
+
+on:
+  schedule:
+    # يعمل تلقائياً مرة كل 3 أيام الساعة 6:00 صباحاً بتوقيت UTC (8:00 صباحاً بتوقيت القاهرة)
+    - cron: '0 6 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  update-tariffs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --upgrade google-genai requests
+
+      - name: Fetch latest official tariffs and update Gist
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GIST_ID: '7b239656b37d7bb1e3bf9ffa761633b7'
+        run: python scripts/fetch_tariffs_gemini.py
