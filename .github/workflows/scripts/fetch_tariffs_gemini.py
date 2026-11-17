@@ -2,6 +2,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -63,7 +64,6 @@ def main() -> int:
     current_data = fetch_current_gist(GIST_ID, GIST_TOKEN)
     print("Current Gist data:", current_data)
 
-    # تفعيل v1beta لدعم أداة Google Search
     client = genai.Client(
         api_key=GEMINI_API_KEY,
         http_options=types.HttpOptions(api_version="v1beta"),
@@ -92,26 +92,41 @@ def main() -> int:
         temperature=0.0,
     )
 
-    models_to_try = ["gemini-2.5-flash", "gemini-2.5-pro"]
+    models_to_try = [
+        "gemini-2.5-flash",
+        "gemini-3.5-flash",
+        "gemini-3.1-pro-preview",
+    ]
     response = None
     last_err = None
     for model_name in models_to_try:
-        try:
-            print(f"Querying Gemini model: {model_name} with v1beta Google Search...")
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config=config,
-            )
-            if response and response.text:
-                print(f"Successfully received response from {model_name}")
-                break
-        except Exception as e:
-            print(f"Model {model_name} returned error: {e}")
-            last_err = e
+        for attempt in range(1, 4):
+            try:
+                print(f"Querying Gemini model: {model_name} (attempt {attempt}/3)...")
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config=config,
+                )
+                if response and response.text:
+                    print(f"Successfully received response from {model_name}")
+                    break
+            except Exception as e:
+                err_str = str(e)
+                print(f"Model {model_name} attempt {attempt} returned: {err_str[:200]}")
+                last_err = e
+                if "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str.lower():
+                    print("High demand detected (503). Waiting 4 seconds before retry...")
+                    time.sleep(4)
+                    continue
+                else:
+                    break
+        if response and response.text:
+            break
 
     if not response or not response.text:
-        raise RuntimeError(f"All Gemini models failed. Last error: {last_err}")
+        print(f"WARNING: Google Gemini API was temporarily unavailable ({last_err}). Existing Gist tariffs will be preserved safely.")
+        return 0
 
     parsed = extract_json_object(response.text or "")
     print("Gemini search output:", parsed)
