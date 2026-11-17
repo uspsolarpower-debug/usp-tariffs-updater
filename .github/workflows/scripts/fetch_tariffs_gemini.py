@@ -88,11 +88,26 @@ def main() -> int:
         temperature=0.0,
     )
 
-    response = client.models.generate_content(
-        model="gemini-3-flash-preview",
-        contents=prompt,
-        config=config,
-    )
+    models_to_try = ["gemini-2.0-flash", "gemini-1.5-flash"]
+    response = None
+    last_err = None
+    for model_name in models_to_try:
+        try:
+            print(f"Querying Gemini model: {model_name}...")
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=config,
+            )
+            if response and response.text:
+                print(f"Successfully received response from {model_name}")
+                break
+        except Exception as e:
+            print(f"Model {model_name} returned error: {e}")
+            last_err = e
+
+    if not response or not response.text:
+        raise RuntimeError(f"All Gemini models failed. Last error: {last_err}")
 
     parsed = extract_json_object(response.text or "")
     print("Gemini search output:", parsed)
