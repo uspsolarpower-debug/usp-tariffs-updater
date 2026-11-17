@@ -26,9 +26,13 @@ def is_valid_rate(val, min_v: float, max_v: float) -> bool:
 
 
 def fetch_current_gist(gist_id: str, token: str) -> dict:
-    headers = {"Accept": "application/vnd.github+json"}
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "USP-Tariffs-Updater",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
     if token:
-        headers["Authorization"] = f"Bearer {token}"
+        headers["Authorization"] = f"token {token}" if token.startswith("ghp_") else f"Bearer {token}"
     resp = requests.get(f"https://api.github.com/gists/{gist_id}", headers=headers, timeout=15)
     resp.raise_for_status()
     data = resp.json()
@@ -39,7 +43,9 @@ def fetch_current_gist(gist_id: str, token: str) -> dict:
 def update_gist(gist_id: str, token: str, payload: dict) -> None:
     headers = {
         "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {token}",
+        "Authorization": f"token {token}" if token.startswith("ghp_") else f"Bearer {token}",
+        "User-Agent": "USP-Tariffs-Updater",
+        "X-GitHub-Api-Version": "2022-11-28",
     }
     body = {
         "files": {
@@ -49,6 +55,8 @@ def update_gist(gist_id: str, token: str, payload: dict) -> None:
         }
     }
     resp = requests.patch(f"https://api.github.com/gists/{gist_id}", headers=headers, json=body, timeout=15)
+    if not resp.ok:
+        print(f"GitHub Gist update error: status={resp.status_code}, response={resp.text}")
     resp.raise_for_status()
 
 
