@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U.S.P Solar Power - Direct Call</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(160deg, #e9f3f8 0%, #f4f8fb 50%, #fdfaf3 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #083b57;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 28px 22px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 14px 35px rgba(8, 59, 87, 0.1);
+    }
+    .brand {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #f59a21;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #083b57;
+      margin-bottom: 6px;
+    }
+    .num {
+      font-size: 22px;
+      font-weight: 700;
+      color: #334155;
+      letter-spacing: 0.8px;
+      margin-bottom: 22px;
+    }
+    .call-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #083b57;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 6px 16px rgba(8, 59, 87, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">U.S.P Solar Power</div>
+    <h1 id="contactName">Direct Call</h1>
+    <div id="contactNum" class="num">01006169000</div>
+    <a id="callLink" class="call-btn" href="tel:01006169000">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z"/></svg>
+      <span>Call Now</span>
+    </a>
+  </div>
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var num = (params.get('n') || '01006169000').replace(/[^0-9+]/g, '');
+      var name = (params.get('name') || '').trim();
+      if (name) document.getElementById('contactName').textContent = name;
+      if (num) {
+        document.getElementById('contactNum').textContent = num;
+        document.getElementById('callLink').href = 'tel:' + num;
+        window.location.href = 'tel:' + num;
+      }
+    })();
+  </script>
+</body>
+</html>
