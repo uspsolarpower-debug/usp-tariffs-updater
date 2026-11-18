@@ -73,6 +73,19 @@
     .btn-ig { background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); color: #ffffff; box-shadow: 0 6px 14px rgba(221,42,123,0.25); }
     .btn-port { background: #0b3d2e; color: #ffffff; box-shadow: 0 6px 14px rgba(11,61,46,0.25); }
     .btn-call { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
+    .welcome-box {
+      display: none;
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      color: #065f46;
+      border: 1.5px solid #34d399;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.12);
+    }
     .footer {
       margin-top: 24px;
       font-size: 0.8rem;
@@ -88,9 +101,10 @@
     <span class="badge">حلول الطاقة الشمسية المتكاملة</span>
     <h1>U.S.P Solar Power</h1>
     <p class="subtitle">للتواصل المباشر مع فريق المبيعات والهندسة والاطلاع على سابقة أعمالنا في مصر</p>
+    <div id="welcomeBox" class="welcome-box"></div>
 
     <div class="links">
-      <a class="link-btn btn-wa" href="https://wa.me/201006169000" target="_blank">💬 تواصل معنا عبر واتساب</a>
+      <a id="waBtn" class="link-btn btn-wa" href="https://wa.me/201006169000" target="_blank">💬 تواصل معنا عبر واتساب</a>
       <a class="link-btn btn-port" href="https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing" target="_blank">📂 سابقة الأعمال (Company Profile)</a>
       <a class="link-btn btn-fb" href="https://www.facebook.com/USP.Solar" target="_blank">📘 صفحتنا على فيسبوك</a>
       <a class="link-btn btn-ig" href="https://www.instagram.com/uspsolar/" target="_blank">📸 حسابنا على إنستجرام</a>
@@ -102,5 +116,25 @@
       Usp.solarpower@gmail.com
     </div>
   </div>
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var clientName = (params.get('c') || '').trim();
+        if (clientName) {
+          var box = document.getElementById('welcomeBox');
+          if (box) {
+            box.textContent = 'أهلاً بحضرتك أ/ ' + clientName + ' 👋 — نتشرف بخدمتكم في U.S.P Solar Power';
+            box.style.display = 'block';
+          }
+          var waBtn = document.getElementById('waBtn');
+          if (waBtn) {
+            var msg = 'أهلاً شركة U.S.P Solar Power، معكم ' + clientName + ' بخصوص عرض السعر';
+            waBtn.href = 'https://wa.me/201006169000?text=' + encodeURIComponent(msg);
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>
