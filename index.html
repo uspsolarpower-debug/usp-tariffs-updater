@@ -105,19 +105,19 @@
     <div id="welcomeBox" class="welcome-box"></div>
 
     <div class="links">
-      <a id="waBtn" class="link-btn btn-wa" href="https://wa.me/201006169000" target="_blank" rel="noopener">
+      <a id="waBtn" class="link-btn btn-wa" href="https://wa.me/201006169000">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.07-1.13.1-1.82-.12-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.18-4.94-4.38-.14-.2-1.18-1.57-1.18-2.99 0-1.42.74-2.12 1-2.41.26-.29.57-.36.76-.36.19 0 .38.01.55.01.18 0 .42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.26 1.63 2.04 1.12 1 2.07 1.31 2.37 1.46.3.15.47.13.64-.08.17-.2.74-.86.94-1.15.2-.29.4-.24.67-.14.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.12.07.7-.17 1.38z"/></svg>
         <span>تواصل معنا عبر واتساب</span>
       </a>
-      <a id="portBtn" class="link-btn btn-port" href="https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing" target="_blank" rel="noopener">
+      <a id="portBtn" class="link-btn btn-port" href="https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2zm5.5 11.5L13 13l1.4-1.4 1.1 1.1 3.1-3.1L20 11l-4.5 4.5z"/></svg>
         <span>سابقة الأعمال (Company Profile)</span>
       </a>
-      <a id="fbBtn" class="link-btn btn-fb" href="https://www.facebook.com/USP.Solar" target="_blank" rel="noopener">
+      <a id="fbBtn" class="link-btn btn-fb" href="https://www.facebook.com/USP.Solar">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.89h-2.34v6.99C18.34 21.13 22 16.99 22 12z"/></svg>
         <span>صفحتنا على فيسبوك</span>
       </a>
-      <a id="igBtn" class="link-btn btn-ig" href="https://www.instagram.com/uspsolar/" target="_blank" rel="noopener">
+      <a id="igBtn" class="link-btn btn-ig" href="https://www.instagram.com/uspsolar/">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
         <span>حسابنا على إنستجرام</span>
       </a>
@@ -137,18 +137,96 @@
       try {
         var params = new URLSearchParams(window.location.search);
         var clientName = (params.get('c') || '').trim();
+        var ua = navigator.userAgent || '';
+        var isAndroid = /Android/i.test(ua);
+        var isIOS = /iPhone|iPad|iPod/i.test(ua);
+        var isChromeAndroid = isAndroid && /Chrome\//i.test(ua) && !/wv|MiuiBrowser|SamsungBrowser|OPR|EdgA/i.test(ua);
+
         if (clientName) {
           var box = document.getElementById('welcomeBox');
           if (box) {
             box.textContent = 'أهلاً بحضرتك أ/ ' + clientName + ' 👋 — نتشرف بخدمتكم في U.S.P Solar Power';
             box.style.display = 'block';
           }
-          var waBtn = document.getElementById('waBtn');
-          if (waBtn) {
-            var waMsg = 'أهلاً شركة U.S.P Solar Power، معكم ' + clientName + ' بخصوص عرض السعر';
-            waBtn.href = 'https://wa.me/201006169000?text=' + encodeURIComponent(waMsg);
-          }
         }
+
+        var waBtn = document.getElementById('waBtn');
+        var portBtn = document.getElementById('portBtn');
+        var fbBtn = document.getElementById('fbBtn');
+        var igBtn = document.getElementById('igBtn');
+
+        var waMsg = clientName
+          ? ('أهلاً شركة U.S.P Solar Power، معكم ' + clientName + ' بخصوص عرض السعر')
+          : 'أهلاً شركة U.S.P Solar Power، أرغب في الاستفسار عن عروض الطاقة الشمسية';
+        var waWebUrl = 'https://wa.me/201006169000?text=' + encodeURIComponent(waMsg);
+        var portWebUrl = 'https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing';
+        var fbWebUrl = 'https://www.facebook.com/USP.Solar';
+        var igWebUrl = 'https://www.instagram.com/uspsolar/';
+
+        if (waBtn) waBtn.href = waWebUrl;
+
+        function bindAppLink(el, chromeIntentUrl, schemeUrl, webUrl) {
+          if (!el) return;
+          if (!isAndroid && !isIOS) {
+            el.target = '_blank';
+            el.rel = 'noopener';
+            return;
+          }
+          el.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isChromeAndroid && chromeIntentUrl) {
+              window.location.href = chromeIntentUrl;
+              return;
+            }
+            if (!schemeUrl) {
+              window.location.href = webUrl;
+              return;
+            }
+            var leftPage = false;
+            var onLeave = function() { leftPage = true; };
+            window.addEventListener('blur', onLeave, { once: true });
+            window.addEventListener('pagehide', onLeave, { once: true });
+            document.addEventListener('visibilitychange', onLeave, { once: true });
+            window.location.href = schemeUrl;
+            setTimeout(function() {
+              window.removeEventListener('blur', onLeave);
+              window.removeEventListener('pagehide', onLeave);
+              document.removeEventListener('visibilitychange', onLeave);
+              if (!leftPage && !document.hidden) {
+                window.location.href = webUrl;
+              }
+            }, 900);
+          });
+        }
+
+        bindAppLink(
+          waBtn,
+          'intent://send?phone=201006169000&text=' + encodeURIComponent(waMsg) +
+            '#Intent;scheme=whatsapp;S.browser_fallback_url=' + encodeURIComponent(waWebUrl) + ';end',
+          'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg),
+          waWebUrl
+        );
+        bindAppLink(
+          portBtn,
+          'intent://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing' +
+            '#Intent;package=com.google.android.apps.docs;scheme=https;S.browser_fallback_url=' + encodeURIComponent(portWebUrl) + ';end',
+          null,
+          portWebUrl
+        );
+        bindAppLink(
+          fbBtn,
+          'intent://facewebmodal/f?href=' + fbWebUrl +
+            '#Intent;package=com.facebook.katana;scheme=fb;S.browser_fallback_url=' + encodeURIComponent(fbWebUrl) + ';end',
+          'fb://facewebmodal/f?href=' + fbWebUrl,
+          fbWebUrl
+        );
+        bindAppLink(
+          igBtn,
+          'intent://instagram.com/_u/uspsolar/' +
+            '#Intent;package=com.instagram.android;scheme=https;S.browser_fallback_url=' + encodeURIComponent(igWebUrl) + ';end',
+          'instagram://user?username=uspsolar',
+          igWebUrl
+        );
       } catch (e) {}
     })();
   </script>
