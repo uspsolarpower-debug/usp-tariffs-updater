@@ -104,11 +104,11 @@
     <div id="welcomeBox" class="welcome-box"></div>
 
     <div class="links">
-      <a id="waBtn" class="link-btn btn-wa" href="https://wa.me/201006169000" target="_blank">💬 تواصل معنا عبر واتساب</a>
-      <a class="link-btn btn-port" href="https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing" target="_blank">📂 سابقة الأعمال (Company Profile)</a>
-      <a class="link-btn btn-fb" href="https://www.facebook.com/USP.Solar" target="_blank">📘 صفحتنا على فيسبوك</a>
-      <a class="link-btn btn-ig" href="https://www.instagram.com/uspsolar/" target="_blank">📸 حسابنا على إنستجرام</a>
-      <a class="link-btn btn-call" href="tel:01006169000">📞 اتصال هاتفي: 01006169000</a>
+      <a id="waBtn" class="link-btn btn-wa" href="https://wa.me/201006169000">💬 تواصل معنا عبر واتساب</a>
+      <a id="portBtn" class="link-btn btn-port" href="https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing">📂 سابقة الأعمال (Company Profile)</a>
+      <a id="fbBtn" class="link-btn btn-fb" href="https://www.facebook.com/USP.Solar">📘 صفحتنا على فيسبوك</a>
+      <a id="igBtn" class="link-btn btn-ig" href="https://www.instagram.com/uspsolar/">📸 حسابنا على إنستجرام</a>
+      <a id="callBtn" class="link-btn btn-call" href="tel:01006169000">📞 اتصال هاتفي: 01006169000</a>
     </div>
 
     <div class="footer">
@@ -121,17 +121,77 @@
       try {
         var params = new URLSearchParams(window.location.search);
         var clientName = (params.get('c') || '').trim();
+        var ua = navigator.userAgent || '';
+        var isAndroid = /Android/i.test(ua);
+        var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
         if (clientName) {
           var box = document.getElementById('welcomeBox');
           if (box) {
             box.textContent = 'أهلاً بحضرتك أ/ ' + clientName + ' 👋 — نتشرف بخدمتكم في U.S.P Solar Power';
             box.style.display = 'block';
           }
-          var waBtn = document.getElementById('waBtn');
+        }
+
+        var waBtn = document.getElementById('waBtn');
+        var portBtn = document.getElementById('portBtn');
+        var fbBtn = document.getElementById('fbBtn');
+        var igBtn = document.getElementById('igBtn');
+        var callBtn = document.getElementById('callBtn');
+
+        var waMsg = clientName
+          ? ('أهلاً شركة U.S.P Solar Power، معكم ' + clientName + ' بخصوص عرض السعر')
+          : 'أهلاً شركة U.S.P Solar Power، أرغب في الاستفسار عن عروض الطاقة الشمسية';
+        var waWebUrl = 'https://wa.me/201006169000?text=' + encodeURIComponent(waMsg);
+        var portWebUrl = 'https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing';
+        var fbWebUrl = 'https://www.facebook.com/USP.Solar';
+        var igWebUrl = 'https://www.instagram.com/uspsolar/';
+
+        if (waBtn) waBtn.href = waWebUrl;
+
+        if (isAndroid) {
           if (waBtn) {
-            var msg = 'أهلاً شركة U.S.P Solar Power، معكم ' + clientName + ' بخصوص عرض السعر';
-            waBtn.href = 'https://wa.me/201006169000?text=' + encodeURIComponent(msg);
+            waBtn.href = 'intent://send?phone=201006169000&text=' + encodeURIComponent(waMsg) +
+              '#Intent;scheme=whatsapp;S.browser_fallback_url=' + encodeURIComponent(waWebUrl) + ';end';
           }
+          if (portBtn) {
+            portBtn.href = 'intent://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing' +
+              '#Intent;package=com.google.android.apps.docs;scheme=https;S.browser_fallback_url=' + encodeURIComponent(portWebUrl) + ';end';
+          }
+          if (fbBtn) {
+            fbBtn.href = 'intent://facewebmodal/f?href=' + fbWebUrl +
+              '#Intent;package=com.facebook.katana;scheme=fb;S.browser_fallback_url=' + encodeURIComponent(fbWebUrl) + ';end';
+          }
+          if (igBtn) {
+            igBtn.href = 'intent://instagram.com/_u/uspsolar/' +
+              '#Intent;package=com.instagram.android;scheme=https;S.browser_fallback_url=' + encodeURIComponent(igWebUrl) + ';end';
+          }
+          if (callBtn) {
+            callBtn.href = 'tel:01006169000';
+            callBtn.addEventListener('click', function() {
+              var opened = false;
+              var markOpened = function() { opened = true; };
+              window.addEventListener('blur', markOpened, { once: true });
+              document.addEventListener('visibilitychange', markOpened, { once: true });
+              setTimeout(function() {
+                window.removeEventListener('blur', markOpened);
+                document.removeEventListener('visibilitychange', markOpened);
+                if (!opened && document.hasFocus()) {
+                  window.location.href = 'intent://01006169000#Intent;scheme=tel;action=android.intent.action.DIAL;end';
+                }
+              }, 350);
+            });
+          }
+        } else if (isIOS) {
+          if (waBtn) waBtn.href = 'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg);
+          if (fbBtn) fbBtn.href = 'fb://facewebmodal/f?href=' + fbWebUrl;
+          if (igBtn) igBtn.href = 'instagram://user?username=uspsolar';
+          if (callBtn) callBtn.href = 'tel:01006169000';
+        } else if (!isAndroid && !isIOS) {
+          if (waBtn) waBtn.target = '_blank';
+          if (portBtn) portBtn.target = '_blank';
+          if (fbBtn) fbBtn.target = '_blank';
+          if (igBtn) igBtn.target = '_blank';
         }
       } catch (e) {}
     })();
