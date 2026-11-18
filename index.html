@@ -129,7 +129,8 @@
 
     <div class="footer">
       أبراج زاهر 3 – مدخل ب – الدور الأول – شقة 110 – امتداد حسن المأمون – مدينة نصر<br>
-      Usp.solarpower@gmail.com
+      Usp.solarpower@gmail.com<br>
+      <span style="display:inline-block;margin-top:6px;color:#059669;font-weight:600;">لفتح التطبيقات والاتصال مباشرة: إذا فُتح الرابط داخل عارض PDF، اضغط (⋮) واختر «فتح في المتصفح»</span>
     </div>
   </div>
   <script>
@@ -137,11 +138,6 @@
       try {
         var params = new URLSearchParams(window.location.search);
         var clientName = (params.get('c') || '').trim();
-        var ua = navigator.userAgent || '';
-        var isAndroid = /Android/i.test(ua);
-        var isIOS = /iPhone|iPad|iPod/i.test(ua);
-        var isWebView = /; wv\)/i.test(ua);
-
         if (clientName) {
           var box = document.getElementById('welcomeBox');
           if (box) {
@@ -151,50 +147,11 @@
         }
 
         var waBtn = document.getElementById('waBtn');
-        var portBtn = document.getElementById('portBtn');
-        var fbBtn = document.getElementById('fbBtn');
-        var igBtn = document.getElementById('igBtn');
-
         var waMsg = clientName
           ? ('أهلاً شركة U.S.P Solar Power، معكم ' + clientName + ' بخصوص عرض السعر')
           : 'أهلاً شركة U.S.P Solar Power، أرغب في الاستفسار عن عروض الطاقة الشمسية';
-        var waWebUrl = 'https://wa.me/201006169000?text=' + encodeURIComponent(waMsg);
-        var portWebUrl = 'https://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing';
-        var fbWebUrl = 'https://www.facebook.com/USP.Solar';
-        var igWebUrl = 'https://www.instagram.com/uspsolar/';
-
-        if (waBtn) waBtn.href = waWebUrl;
-
-        if (isAndroid && !isWebView) {
-          if (waBtn) {
-            waBtn.href = 'intent://send?phone=201006169000&text=' + encodeURIComponent(waMsg) +
-              '#Intent;scheme=whatsapp;S.browser_fallback_url=' + encodeURIComponent(waWebUrl) + ';end';
-          }
-          if (portBtn) {
-            portBtn.href = 'intent://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing' +
-              '#Intent;scheme=https;package=com.google.android.apps.docs;S.browser_fallback_url=' + encodeURIComponent(portWebUrl) + ';end';
-          }
-          if (fbBtn) {
-            fbBtn.href = 'intent://facewebmodal/f?href=' + fbWebUrl +
-              '#Intent;scheme=fb;package=com.facebook.katana;S.browser_fallback_url=' + encodeURIComponent(fbWebUrl) + ';end';
-          }
-          if (igBtn) {
-            igBtn.href = 'intent://instagram.com/_u/uspsolar/' +
-              '#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=' + encodeURIComponent(igWebUrl) + ';end';
-          }
-        } else if (isAndroid && isWebView) {
-          if (waBtn) waBtn.href = 'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg);
-          if (fbBtn) fbBtn.href = 'fb://facewebmodal/f?href=' + fbWebUrl;
-          if (igBtn) igBtn.href = 'instagram://user?username=uspsolar';
-        } else if (isIOS) {
-          if (waBtn) waBtn.href = 'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg);
-          if (fbBtn) fbBtn.href = 'fb://facewebmodal/f?href=' + fbWebUrl;
-          if (igBtn) igBtn.href = 'instagram://user?username=uspsolar';
-        } else {
-          if (waBtn) { waBtn.target = '_blank'; waBtn.rel = 'noopener'; }
-          if (portBtn) { portBtn.target = '_blank'; portBtn.rel = 'noopener'; }
-          if (fbBtn) { fbBtn.target = '_blank'; fbBtn.rel = 'noopener'; }
-          if (igBtn) { igBtn.target = '_blank'; igBtn.rel = 'noopener'; }
+        if (waBtn) {
+          waBtn.href = 'https://wa.me/201006169000?text=' + encodeURIComponent(waMsg);
         }
       } catch (e) {}
     })();
