@@ -140,7 +140,7 @@
         var ua = navigator.userAgent || '';
         var isAndroid = /Android/i.test(ua);
         var isIOS = /iPhone|iPad|iPod/i.test(ua);
-        var isChromeAndroid = isAndroid && /Chrome\//i.test(ua) && !/wv|MiuiBrowser|SamsungBrowser|OPR|EdgA/i.test(ua);
+        var isWebView = /; wv\)/i.test(ua);
 
         if (clientName) {
           var box = document.getElementById('welcomeBox');
@@ -165,68 +165,37 @@
 
         if (waBtn) waBtn.href = waWebUrl;
 
-        function bindAppLink(el, chromeIntentUrl, schemeUrl, webUrl) {
-          if (!el) return;
-          if (!isAndroid && !isIOS) {
-            el.target = '_blank';
-            el.rel = 'noopener';
-            return;
+        if (isAndroid && !isWebView) {
+          if (waBtn) {
+            waBtn.href = 'intent://send?phone=201006169000&text=' + encodeURIComponent(waMsg) +
+              '#Intent;scheme=whatsapp;S.browser_fallback_url=' + encodeURIComponent(waWebUrl) + ';end';
           }
-          el.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isChromeAndroid && chromeIntentUrl) {
-              window.location.href = chromeIntentUrl;
-              return;
-            }
-            if (!schemeUrl) {
-              window.location.href = webUrl;
-              return;
-            }
-            var leftPage = false;
-            var onLeave = function() { leftPage = true; };
-            window.addEventListener('blur', onLeave, { once: true });
-            window.addEventListener('pagehide', onLeave, { once: true });
-            document.addEventListener('visibilitychange', onLeave, { once: true });
-            window.location.href = schemeUrl;
-            setTimeout(function() {
-              window.removeEventListener('blur', onLeave);
-              window.removeEventListener('pagehide', onLeave);
-              document.removeEventListener('visibilitychange', onLeave);
-              if (!leftPage && !document.hidden) {
-                window.location.href = webUrl;
-              }
-            }, 900);
-          });
+          if (portBtn) {
+            portBtn.href = 'intent://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing' +
+              '#Intent;scheme=https;package=com.google.android.apps.docs;S.browser_fallback_url=' + encodeURIComponent(portWebUrl) + ';end';
+          }
+          if (fbBtn) {
+            fbBtn.href = 'intent://facewebmodal/f?href=' + fbWebUrl +
+              '#Intent;scheme=fb;package=com.facebook.katana;S.browser_fallback_url=' + encodeURIComponent(fbWebUrl) + ';end';
+          }
+          if (igBtn) {
+            igBtn.href = 'intent://instagram.com/_u/uspsolar/' +
+              '#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=' + encodeURIComponent(igWebUrl) + ';end';
+          }
+        } else if (isAndroid && isWebView) {
+          if (waBtn) waBtn.href = 'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg);
+          if (fbBtn) fbBtn.href = 'fb://facewebmodal/f?href=' + fbWebUrl;
+          if (igBtn) igBtn.href = 'instagram://user?username=uspsolar';
+        } else if (isIOS) {
+          if (waBtn) waBtn.href = 'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg);
+          if (fbBtn) fbBtn.href = 'fb://facewebmodal/f?href=' + fbWebUrl;
+          if (igBtn) igBtn.href = 'instagram://user?username=uspsolar';
+        } else {
+          if (waBtn) { waBtn.target = '_blank'; waBtn.rel = 'noopener'; }
+          if (portBtn) { portBtn.target = '_blank'; portBtn.rel = 'noopener'; }
+          if (fbBtn) { fbBtn.target = '_blank'; fbBtn.rel = 'noopener'; }
+          if (igBtn) { igBtn.target = '_blank'; igBtn.rel = 'noopener'; }
         }
-
-        bindAppLink(
-          waBtn,
-          'intent://send?phone=201006169000&text=' + encodeURIComponent(waMsg) +
-            '#Intent;scheme=whatsapp;S.browser_fallback_url=' + encodeURIComponent(waWebUrl) + ';end',
-          'whatsapp://send?phone=201006169000&text=' + encodeURIComponent(waMsg),
-          waWebUrl
-        );
-        bindAppLink(
-          portBtn,
-          'intent://drive.google.com/file/d/1MtQuNak_p9iKMUqicxmNc7lerHeD0UAt/view?usp=sharing' +
-            '#Intent;package=com.google.android.apps.docs;scheme=https;S.browser_fallback_url=' + encodeURIComponent(portWebUrl) + ';end',
-          null,
-          portWebUrl
-        );
-        bindAppLink(
-          fbBtn,
-          'intent://facewebmodal/f?href=' + fbWebUrl +
-            '#Intent;package=com.facebook.katana;scheme=fb;S.browser_fallback_url=' + encodeURIComponent(fbWebUrl) + ';end',
-          'fb://facewebmodal/f?href=' + fbWebUrl,
-          fbWebUrl
-        );
-        bindAppLink(
-          igBtn,
-          'intent://instagram.com/_u/uspsolar/' +
-            '#Intent;package=com.instagram.android;scheme=https;S.browser_fallback_url=' + encodeURIComponent(igWebUrl) + ';end',
-          'instagram://user?username=uspsolar',
-          igWebUrl
-        );
       } catch (e) {}
     })();
   </script>
